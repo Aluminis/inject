@@ -22,7 +22,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Get release tags
-        id: get-tags
+        id: get-latest-tag
         uses: actions/github-script@v6
         with:
           script: |
@@ -40,6 +40,10 @@ jobs:
 
       - name: Set environment variable
         run: echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.tag_name }}" >> $GITHUB_ENV
+
+      - name: Print latest release tag
+        run: |
+          echo "Latest release tag: ${{ env.GITHUB_VERSION }}"
 
       - name: Publish package
         run: ./gradlew publish
