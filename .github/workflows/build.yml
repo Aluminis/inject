@@ -30,7 +30,7 @@ jobs:
         run: |
           release_tags=$(git tag --sort=-creatordate)
           release_tag=$(echo "$release_tags" | head -n 1)
-          echo "Associated Release: $release_tag"
+          echo "Associated Release: $release_tags"
           echo "::set-output name=release_tag::$release_tag"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
