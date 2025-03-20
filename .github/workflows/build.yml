@@ -27,7 +27,8 @@ jobs:
 
       - name: build
         run: ./gradlew build
-        env: ${{ github.event.release.tag_name }}
+        env:
+          GITHUB_VERSION: ${{ github.event.release.tag_name }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
