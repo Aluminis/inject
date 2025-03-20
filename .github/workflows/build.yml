@@ -25,9 +25,6 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Echo Version
-        run: echo ${{ github.event.release.tag_name }}
-
       - name: build
         run: ./gradlew build
         env: ${{ github.event.release.tag_name }}
