@@ -30,6 +30,8 @@ jobs:
         uses: joutvhu/get-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Echo Version
         run: echo ${{ steps.get_current_release.tag_name }}
 
       - name: build
