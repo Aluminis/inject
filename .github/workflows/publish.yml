@@ -39,11 +39,9 @@ jobs:
             return { tag_name: latestRelease.tag_name };
 
       - name: Set environment variable
-        run: echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.tag_name }}" >> $GITHUB_ENV
-
-      - name: Print latest release tag
-        run: |
-          echo "Latest release tag: ${{ env.GITHUB_VERSION }}"
+        run: echo "set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.tag_name }}"
+        env:
+          GITHUB_VERSION: ${{ steps.get-latest-tag.outputs.tag_name }}
 
       - name: Publish package
         run: ./gradlew publish
