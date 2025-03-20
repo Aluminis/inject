@@ -31,14 +31,12 @@ jobs:
           release_tags=$(git tag --sort=-creatordate)
           release_tag=$(echo "$release_tags" | head -n 1)
           echo "Associated Release: $release_tags"
-          echo "::set-output name=release_tag::$release_tag"
+          echo "GITHUB_VERSION=$release_tag" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build
         run: ./gradlew build
-        env:
-          GITHUB_VERSION: ${{ steps.recent-tag.outputs.release_tag }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
