@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+version = System.getenv("GITHUB_VERSION")
 group = project.maven_group
 
 base {
