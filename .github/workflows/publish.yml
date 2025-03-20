@@ -36,7 +36,7 @@ jobs:
             }
             const latestRelease = releases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
             console.log("Latest release tag:", latestRelease.tag_name);
-            return latestRelease.tag_name;
+            return { tag_name: latestRelease.tag_name };
 
       - name: Set environment variable
         run: echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.tag_name }}" >> $GITHUB_ENV
