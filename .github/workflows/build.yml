@@ -25,18 +25,12 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Get Current Release
-        id: get_current_release
-        uses: joutvhu/get-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Echo Version
-        run: echo ${{ steps.get_current_release.tag_name }}
+        run: echo ${{ github.event.release.tag_name }}
 
       - name: build
         run: ./gradlew build
-        env: ${{ steps.get_current_release.tag_name }}
+        env: ${{ github.event.release.tag_name }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
