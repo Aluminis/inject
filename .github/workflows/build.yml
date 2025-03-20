@@ -29,7 +29,7 @@ jobs:
         id: recent-tag
         run: |
           release_tags=$(git tag --sort=-creatordate)
-          release_tag=$(echo "release_tags" | head -n 1)
+          release_tag=$(echo "$release_tags" | head -n 1)
           echo "Associated Release: $release_tag"
           echo "::set-output name=release_tag::$release_tag"
 
