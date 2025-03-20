@@ -21,15 +21,25 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Get most recent tag
-        id: recent-tag
-        run: |
-          release_tags=$(git tag --sort=-creatordate)
-          release_tag=$(echo "$release_tags" | head -n 1)
-          echo "Associated Release: $release_tag"
-          echo "GITHUB_VERSION=$release_tag" >> $GITHUB_ENV
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get release tags
+        id: get-tags
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            if (releases.length === 0) {
+              console.log("No releases found.");
+              return null;
+            }
+            const latestRelease = releases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+            console.log("Latest release tag:", latestRelease.tag_name);
+            return latestRelease.tag_name;
+
+      - name: Set environment variable
+        run: echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.tag_name }}" >> $GITHUB_ENV
 
       - name: Publish package
         run: ./gradlew publish

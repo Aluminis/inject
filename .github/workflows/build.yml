@@ -34,13 +34,16 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            const tags = releases.map(release => release.tag_name);
-            console.log("Release tags:", tags);
-            return tags;
+            if (releases.length === 0) {
+              console.log("No releases found.");
+              return null;
+            }
+            const latestRelease = releases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+            console.log("Latest release tag:", latestRelease.tag_name);
+            return latestRelease.tag_name;
 
-      - name: Print release tags
-        run: | 
-          echo "Release tags: ${{ steps.get-tags.outputs.result }}"
+      - name: Set environment variable
+        run: echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.tag_name }}" >> $GITHUB_ENV
 
       - name: build
         run: ./gradlew build
