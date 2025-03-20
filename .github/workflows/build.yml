@@ -39,7 +39,7 @@ jobs:
             return tags;
 
       - name: Print release tags
-        run:
+        run: | 
           echo "Release tags: ${{ steps.get-tags.outputs.result }}"
 
       - name: build
