@@ -25,10 +25,18 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
 
+      - name: Get most recent tag
+        id: recent-tag
+        run: |
+          release_tags=$(git tag --sort=-creatordate)
+          release_tag=$(echo "release_tags" | head -n 1)
+          echo "Associated Release: $release_tag"
+          echo "::set-output name=release_tag::$release_tag"
+
       - name: build
         run: ./gradlew build
         env:
-          GITHUB_VERSION: ${{ github.event.release.tag_name }}
+          GITHUB_VERSION: ${{ steps.recent-tag.outputs.release_tag }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
