@@ -28,6 +28,8 @@ jobs:
           release_tag=$(echo "$release_tags" | head -n 1)
           echo "Associated Release: $release_tag"
           echo "::set-output name=release_tag::$release_tag"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish package
         run: ./gradlew publish
