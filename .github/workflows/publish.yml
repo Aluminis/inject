@@ -56,4 +56,5 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           name: Aluminis Inject ${{ steps.get-latest-tag.outputs.result }}
+          version: ${{ steps.get-latest-tag.outputs.result }}
 
