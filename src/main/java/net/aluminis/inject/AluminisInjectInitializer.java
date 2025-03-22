@@ -1,11 +1,11 @@
-package main.java.net.aluminis.inject;
+package net.aluminis.inject;
 
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Aluminisinject implements ModInitializer {
+public class AluminisInjectInitializer implements ModInitializer {
 	public static final String MOD_ID = "aluminis-inject";
 
 	// This logger is used to write text to the console and the log file.
@@ -19,6 +19,6 @@ public class Aluminisinject implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Initialized aluminis-inject");
 	}
 }
