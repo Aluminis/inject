@@ -1,3 +1,8 @@
+project:
+  languages:
+    java:
+      groupId: net.aluminis
+
 signing:
   active: ALWAYS
   armored: true
@@ -6,6 +11,7 @@ deploy:
   maven:
     mavenCentral:
       sonatype:
+        namespace: net.aluminis
         active: ALWAYS
         url: https://central.sonatype.com/api/v1/publisher
         stagingRepositories:
