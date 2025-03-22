@@ -44,6 +44,9 @@ jobs:
           echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.result }}" >> $GITHUB_ENV
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
+      - name: Create staging directory
+        run: mkdir -p target/staging-deploy
+
       - name: Run JReleaser
         uses: jreleaser/release-action@v2
         env:
