@@ -1,8 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
-	id 'application'
-	id 'org.jreleaser' version '1.17.0'
+	id 'signing'
 }
 
 version = System.getenv("GITHUB_VERSION")
@@ -10,25 +9,6 @@ group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
-}
-
-jreleaser {
-	//noinspection GroovyAssignabilityCheck
-    signing {
-		active = 'ALWAYS'
-		armored = true
-	}
-	deploy {
-		maven {
-			//noinspection GroovyAssignabilityCheck
-            mavenCentral {
-                sonatype {
-					active = 'ALWAYS'
-					url = 'https://central.sonatype.com/api/v1/publisher'
-				}
-			}
-		}
-	}
 }
 
 repositories {
@@ -92,6 +72,11 @@ jar {
 	}
 }
 
+signing {
+	useInMemoryPgpKeys(System.getenv('GPG_KEY_ID'), System.getenv('GPG_SECRET_KEY'), System.getenv('GPG_PASSPHRASE'))
+	sign publishing.publications.mavenJava
+}
+
 // configure the maven publication
 publishing {
 	publications {
@@ -109,6 +94,15 @@ publishing {
 			credentials {
 				username = System.getenv("GITHUB_ACTOR")
 				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
+
+		maven {
+			name = "MavenCentral"
+			url = "https://central.sonatype.com/api/v1/publisher/upload"
+			credentials {
+				username = System.getenv("SONATYPE_USERNAME")
+				password = System.getenv("SONATYPE_GITHUB_TOKEN")
 			}
 		}
 	}
