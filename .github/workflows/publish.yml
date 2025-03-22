@@ -44,7 +44,16 @@ jobs:
           echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.result }}" >> $GITHUB_ENV
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
-      - name: Publish package
+      - name: Publish Maven package
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Modrinth version
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          name: Aluminis Inject ${{ steps.get-latest-tag.outputs.result }}
+
