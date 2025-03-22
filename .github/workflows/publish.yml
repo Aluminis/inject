@@ -47,8 +47,10 @@ jobs:
       - name: Create staging directory
         run: mkdir -p target/staging-deploy
 
-      - name: Run JReleaser
+      - name: Run JReleaser Changelog
         uses: jreleaser/release-action@v2
+        with:
+          arguments: 'changelog'
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -57,6 +59,46 @@ jobs:
           JRELEASER_PROJECT_VERSION: ${{ steps.get-latest-tag.outputs.result }}
           JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
           JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
+
+      - name: Run JReleaser Checksum
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'checksum'
+
+      - name: Run JReleaser Catalog
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'catalog'
+
+      - name: Run JReleaser Sign
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'sign'
+
+      - name: Run JReleaser Deploy
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'deploy'
+
+      - name: Run JReleaser Upload
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'upload'
+
+      - name: Run JReleaser Prepare
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'prepare'
+
+      - name: Run JReleaser Package
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'package'
+
+      - name: Run JReleaser Publish
+        uses: jreleaser/release-action@v2
+        with:
+          arguments: 'publish'
 
       - name: Publish Modrinth version
         uses: Kir-Antipov/mc-publish@v3.3
