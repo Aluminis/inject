@@ -1,6 +1,8 @@
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
+	id 'application'
+	id 'org.jreleaser' version '1.17.0'
 }
 
 version = System.getenv("GITHUB_VERSION")
@@ -8,6 +10,25 @@ group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
+}
+
+jreleaser {
+	//noinspection GroovyAssignabilityCheck
+    signing {
+		active = 'ALWAYS'
+		armored = true
+	}
+	deploy {
+		maven {
+			//noinspection GroovyAssignabilityCheck
+            mavenCentral {
+                sonatype {
+					active = 'ALWAYS'
+					url = 'https://central.sonatype.com/api/v1/publisher'
+				}
+			}
+		}
+	}
 }
 
 repositories {
