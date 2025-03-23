@@ -48,7 +48,7 @@ jobs:
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
       - name: Publish to maven central
-        uses: gradlew publishAndReleaseToMavenCentral --no-configuration-cache
+        run: gradlew publishAndReleaseToMavenCentral --no-configuration-cache
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
