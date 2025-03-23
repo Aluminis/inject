@@ -49,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_VERSION: ${{ steps.get-latest-tag.outputs.result }}
-          SONATYPE_USERNAME: ${{ JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
-          SONATYPE_TOKEN: ${{ JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
 
       - name: Publish Modrinth version
         uses: Kir-Antipov/mc-publish@v3.3
