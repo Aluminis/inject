@@ -48,7 +48,7 @@ jobs:
         run: ./gradlew publish -Psigning.keyId=${{ secrets.GPG_SIGNING_KEY }} -Psigning.password=${{ secrets.GPG_PASSPHRASE }} -Psigning.secretKey=${{ secrets.GPG_SECRET_KEY }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_VERSION: ${{ steps.recent-tag.outputs.release_tag }}
+          GITHUB_VERSION: ${{ steps.get-latest-tag.outputs.result }}
 
       - name: Publish Modrinth version
         uses: Kir-Antipov/mc-publish@v3.3
