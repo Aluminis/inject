@@ -99,8 +99,8 @@ publishing {
 			name = "MavenCentral"
 			url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 			credentials(HttpHeaderCredentials) {
-				name: "Authorization"
-				value: "Bearer <${{System.getenv("SONATYPE_TOKEN")}}>"
+				name = "Authorization"
+				value = "Bearer <${{System.getenv("SONATYPE_TOKEN")}}>"
 			}
 			authentication { header(HttpHeaderAuthentication) }
 		}
