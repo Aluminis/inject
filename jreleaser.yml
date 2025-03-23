@@ -16,3 +16,9 @@ deploy:
         url: https://central.sonatype.com/api/v1/publisher
         stagingRepositories:
           - target/staging-deploy
+
+release:
+  github:
+    owner: Aluminis
+    host: github.com
+    apiEndpoint: https://api.github.com
