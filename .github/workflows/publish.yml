@@ -44,17 +44,8 @@ jobs:
           echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.result }}" >> $GITHUB_ENV
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
-      - name: Sign package
-        run: ./gradlew sign
-        env:
-          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_KEY_ID: ${{ secrets.GPG_SIGNING_KEY }}
-          SONATYPE_TOKEN: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
-          SONATYPE_USERNAME: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
-
       - name: Publish package
-        run: ./gradlew publish
+        run: ./gradlew publish -Psigning.keyId=${{ secrets.GPG_SIGNING_KEY }} -Psigning.password=${{ secrets.GPG_PASSPHRASE }} -Psigning.secretKey=${{ secrets.GPG_SECRET_KEY }})
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_VERSION: ${{ steps.recent-tag.outputs.release_tag }}

@@ -72,11 +72,6 @@ jar {
 	}
 }
 
-signing {
-	useInMemoryPgpKeys(System.getenv('GPG_KEY_ID'), System.getenv('GPG_SECRET_KEY'), System.getenv('GPG_PASSPHRASE'))
-	sign configurations.jar
-}
-
 // configure the maven publication
 publishing {
 	publications {
@@ -96,6 +91,8 @@ publishing {
 				password = System.getenv("GITHUB_TOKEN")
 			}
 		}
+
+		mavenCentral()
 
 		maven {
 			name = "MavenCentral"
