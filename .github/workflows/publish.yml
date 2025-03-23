@@ -45,7 +45,7 @@ jobs:
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
       - name: Run JReleaser Changelog
-        run: ./gradlew jreleaserFullRelease
+        uses: jreleaser/release-action@v2
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
