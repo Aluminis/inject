@@ -36,7 +36,10 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
+}
 
+tasks.named("publishMavenJavaPublicationToMavenCentralRepository") {
+	dependsOn tasks.named("signMavenPublication")
 }
 
 dependencies {
