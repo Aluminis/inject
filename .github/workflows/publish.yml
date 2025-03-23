@@ -2,13 +2,10 @@ name: Publish package to GitHub Packages
 on:
   release:
     types: [created]
-permissions: write-all
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    permissions: write-all
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
