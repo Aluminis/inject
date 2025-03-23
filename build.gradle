@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 	id 'signing'
+	id 'org.jreleaser' version '1.17.0'
 }
 
 version = System.getenv("GITHUB_VERSION")
@@ -90,20 +91,6 @@ publishing {
 			credentials {
 				username = System.getenv("GITHUB_ACTOR")
 				password = System.getenv("GITHUB_TOKEN")
-			}
-		}
-
-		mavenCentral()
-
-		maven {
-			name = "MavenCentral"
-			url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-			credentials {
-				username = System.getenv("SONATYPE_USERNAME")
-				password = System.getenv("SONATYPE_TOKEN")
-			}
-			authentication {
-				basic(BasicAuthentication)
 			}
 		}
 	}

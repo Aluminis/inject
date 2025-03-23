@@ -44,13 +44,16 @@ jobs:
           echo "GITHUB_VERSION=${{ steps.get-latest-tag.outputs.result }}" >> $GITHUB_ENV
           echo "Set GITHUB_VERSION env variable to ${{ steps.get-latest-tag.outputs.result }}"
 
-      - name: Publish package
-        run: ./gradlew publish -Psigning.keyId=${{ secrets.GPG_SIGNING_KEY }} -Psigning.password=${{ secrets.GPG_PASSPHRASE }} -Psigning.secretKey=${{ secrets.GPG_SECRET_KEY }})
+      - name: Run JReleaser Changelog
+        run: ./gradlew jreleaserFullRelease
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_VERSION: ${{ steps.get-latest-tag.outputs.result }}
-          SONATYPE_USERNAME: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
-          SONATYPE_TOKEN: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
+          JRELEASER_PROJECT_VERSION: ${{ steps.get-latest-tag.outputs.result }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_TOKEN }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME }}
 
       - name: Publish Modrinth version
         uses: Kir-Antipov/mc-publish@v3.3
