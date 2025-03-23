@@ -103,7 +103,7 @@ publishing {
 				password = System.getenv("SONATYPE_TOKEN")
 			}
 			authentication {
-				create(BasicAuthentication)
+				basic(BasicAuthentication)
 			}
 		}
 	}
