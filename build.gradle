@@ -1,11 +1,12 @@
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
-	id "com.vanniktech.maven.publish" version "0.31.0-rc2"
+	id 'org.jreleaser' version '1.17.0'
 }
 
-version = System.getenv("GITHUB_VERSION")
+version = System.getenv("GITHUB_VERSION") ?: '0.0.0-alpha'
 group = project.maven_group
+def archiveName = project.archives_base_name
 
 base {
 	archivesName = project.archives_base_name
@@ -19,14 +20,6 @@ repositories {
 	// for more information about repositories.
 }
 
-mavenPublishing {
-	coordinates('net.aluminis', project.archives_base_name, System.getenv("GITHUB_VERSION"))
-	pom {
-		name = project.archives_base_name
-
-	}
-}
-
 loom {
 	splitEnvironmentSourceSets()
 
@@ -36,10 +29,6 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-}
-
-tasks.named("publishMavenJavaPublicationToMavenCentralRepository") {
-	dependsOn tasks.named("signMavenPublication")
 }
 
 dependencies {
@@ -70,9 +59,37 @@ java {
 	// if it is present.
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
+	withJavadocJar()
 
 	sourceCompatibility = JavaVersion.VERSION_21
 	targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.register('deploy-maven') {
+	dependsOn jreleaserChecksum
+	dependsOn jreleaserSign
+	dependsOn jreleaserDeploy
+}
+
+jreleaser {
+	deploy {
+		maven {
+			//noinspection GroovyAssignabilityCheck
+			mavenCentral {
+                central {
+					active = 'ALWAYS'
+					url = 'https://central.sonatype.com/api/v1/publisher'
+					stagingRepositories = ['build/repo']
+					applyMavenCentralRules = true
+				}
+			}
+		}
+	}
+
+	signing {
+		setActive('ALWAYS')
+		setArmored(true)
+	}
 }
 
 jar {
@@ -87,6 +104,27 @@ jar {
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
+			pom {
+				description = project.repo_description
+				url = "https://github.com/Aluminis/${archiveName}"
+				name = project.archives_base_name
+				licenses {
+					license {
+						name.set("The Apache License, Version 2.0")
+					}
+				}
+				developers {
+					developer {
+						name = 'KraftyKaleb'
+					}
+				}
+				scm {
+					connection = "scm:git:git://github.com/Aluminis/${archiveName}.git"
+					developerConnection = "scm:git:git://github.com/Aluminis/${archiveName}.git"
+					url = "https://github.com/Aluminis/${archiveName}"
+				}
+			}
+
 			artifactId = project.archives_base_name
 			version = project.version
 			from components.java
@@ -96,12 +134,7 @@ publishing {
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
 		maven {
-			name = "GitHubPackages"
-			url = "https://maven.pkg.github.com/aluminis/inject"
-			credentials {
-				username = System.getenv("GITHUB_ACTOR")
-				password = System.getenv("GITHUB_TOKEN")
-			}
+			url = uri(layout.buildDirectory.dir("repo"))
 		}
 	}
 }
