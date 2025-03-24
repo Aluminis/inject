@@ -8,7 +8,6 @@ import net.fabricmc.loader.impl.ModContainerImpl;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -28,7 +27,8 @@ public class CoreModule extends AbstractModule {
                 for (Path path : ((ModContainerImpl) modContainer).getCodeSourcePaths()) {
                     File file = path.toFile();
 
-                    if (file.isDirectory()) findClasses(file).forEach(this::validateClassAndAutoload);
+
+                    if (file.isDirectory()) findClasses(file, file.getAbsolutePath()).forEach(this::validateClassAndAutoload);
                     else if (file.getName().endsWith(".jar")) {
                         try (JarFile jar = new JarFile(path.toFile())) {
                             Enumeration<JarEntry> entries = jar.entries();
@@ -57,7 +57,7 @@ public class CoreModule extends AbstractModule {
         }
     }
 
-    private List<Class<?>> findClasses(File fileOrDirectory) {
+    private List<Class<?>> findClasses(File fileOrDirectory, String baseDir) {
         List<Class<?>> classes = new ArrayList<>();
         if (!fileOrDirectory.exists()) return classes;
 
@@ -66,15 +66,18 @@ public class CoreModule extends AbstractModule {
         if (files == null) files = new File[]{fileOrDirectory};
 
         for (File file : files) {
-            if (file.isDirectory()) classes.addAll(findClasses(file));
+            if (file.isDirectory()) classes.addAll(findClasses(file, baseDir));
             else if (file.getName().endsWith(".class")) {
+                String dottedBaseDir = baseDir.replace('/', '.')
+                        .replace("\\", ".");
+
                 String className = file.getAbsolutePath()
                         .replace('/', '.')
                         .replace("\\", ".")
+                        .replace(dottedBaseDir, "")
+                        .replaceFirst(".", "")
                         .replace(".class", "");
 
-                String[] splitName = className.split("net.aluminis.inject");
-                className = "net.aluminis.inject" + splitName[splitName.length-1];
                 try {
                     Class<?> clazz = Class.forName(className);
 
