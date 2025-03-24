@@ -79,6 +79,7 @@ jreleaser {
                 central {
 					active = 'ALWAYS'
 					url = 'https://central.sonatype.com/api/v1/publisher'
+					retryDelay = 30
 					stagingRepositories = ['build/repo']
 					applyMavenCentralRules = true
 				}
