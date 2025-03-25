@@ -46,6 +46,8 @@ dependencies {
 
 	api 'javax.inject:javax.inject:1'
 	api 'jakarta.inject:jakarta.inject-api:2.0.1'
+
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }
 
 processResources {
@@ -58,6 +60,10 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
+}
+
+test {
+	useJUnitPlatform()
 }
 
 java {
