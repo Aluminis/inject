@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import net.aluminis.inject.module.CoreModule;
 import net.aluminis.inject.service.loader.ModuleLoader;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public class AluminisInjectInitializer implements ModInitializer {
 	/**
@@ -21,10 +20,7 @@ public class AluminisInjectInitializer implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		coreInjector = Guice.createInjector(new CoreModule());
-
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-			coreInjector.getInstance(ModuleLoader.class).loadModules();
-		});
+		coreInjector.getInstance(ModuleLoader.class).loadModules();
 	}
 
 	public static void setCoreInjector(Injector injector) {
